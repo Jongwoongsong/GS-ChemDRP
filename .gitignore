@@ -1,0 +1,23 @@
+# 큰 파일
+*.pth
+*.pt
+checkpoints/
+outputs_kci_gating/
+
+# 데이터 (README에 링크 제공)
+gdsc_split_949/
+graph_cache/
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+*.egg-info/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
