@@ -7,14 +7,15 @@
 
 ## Overview
 
-GS-ChemDRP는 항암제의 **세포주별 약물 반응(IC50)**을 예측하는 딥러닝 모델입니다.
-사전학습된 화학 언어 모델 ChemBERTa와 유전자 발현 데이터를 결합하며, GDSC에서 제공하는 약물 표적 경로(drug target pathway) 정보를 **지도 대조학습(supervised contrastive learning)**에 활용합니다.
+GS-ChemDRP는 항암제의 세포주별 약물 반응(IC50)을 예측하는 딥러닝 모델입니다. 
+사전학습된 화학 언어 모델 ChemBERTa와 유전자 발현 데이터를 결합하며, 
+GDSC에서 제공하는 약물 표적 경로(drug target pathway) 정보를 대조 학습으로 활용합니다.
 
 Key Features:
-- 경량 모델: Graph 신경망 불필요, ChemBERTa(frozen) + Gene embedding만 사용
-- 생물학적 해석성: Gene set gating으로 약물-경로 상호작용 해석 가능
-- 경로 정보 통합: Drug target pathway 기반 supervised contrastive learning
-- 경쟁력 있는 성능: Test PCC 0.9220 (GDSC 데이터셋)
+- Lightweight model: No graph neural networks required, uses only frozen ChemBERTa and gene embeddings
+- Biological interpretability: Drug-pathway interactions interpretable through gene set gating
+- Pathway information integration: Supervised contrastive learning based on drug target pathways
+- Strong performance: Test PCC 0.9220 (GDSC dataset, 949 cell lines)
 
 ---
 
@@ -38,41 +39,45 @@ Ablation Study:
 
 ## Model Architecture
 
-Drug (SMILES) 
-  -> ChemBERTa [Frozen, 256-dim]
-  
-Cell (Gene Expression, 949 genes)
-  -> Gene Set Embedding [Hallmark 48 pathways]
-  -> Gene Set Gating + Cross-Attention
-  
-[Drug embedding] + [Cell representation]
-  -> MLP Head
-  -> IC50 Prediction
+### Overall Model Structure
 
-Loss = MSE + lambda * Supervised Contrastive Loss
-       (based on drug target pathway)
+![Model Overview](figures/Figure 1.png)
 
-Core Components:
+The model consists of two main branches:
+- **Drug Encoder**: ChemBERTa-based encoder for drug representation
+- **Cell Encoder**: Gene set-based representation for cell lines
+- **Interaction Module**: Gating mechanism and cross-attention for drug-cell interaction
+- **Prediction Head**: MLP for IC50 prediction
 
-1. Drug Encoder: ChemBERTa
-   - Pre-trained chemical language model (77M SMILES)
-   - Frozen during training
-   - Output: [CLS] token -> [256-dim]
+### Detailed Architecture
 
-2. Cell Representation
-   - Gene expression embedding: Landmark genes (949) -> [256-dim]
-   - Gene set gating: 48 Hallmark pathways
-   - Attention-weighted aggregation per pathway
+![Detailed Architecture](figures/Figure 2.png)
 
-3. Drug-Cell Interaction
-   - Cross-attention: Drug embedding as query
-   - Gene set embeddings as key/value
-   - Interpretable drug-pathway interactions
+**Drug Branch:**
+- Input: SMILES strings
+- ChemBERTa-based drug encoder (pre-trained on 77M SMILES)
+- Supervised contrastive learning using drug target pathway information
+- Output: Drug embedding [256-dim]
 
-4. Supervised Contrastive Learning
-   - Similar drug target pathways close in embedding space
-   - GDSC drug_target_pathway information
-   - Soft regularization with lambda=0.1
+**Cell Branch:**
+- Input: Gene expression data (949 landmark genes)
+- Gene set representation: 48 Hallmark pathways
+- Gene set embedding and aggregation
+- Output: Cell representation with pathway-aware features
+
+### Contrastive Learning Framework
+
+![Contrastive Learning](figures/Figure 3.png)
+
+Supervised contrastive learning encourages drugs targeting the same pathways to have similar embeddings:
+- Drug tokens from same target pathway should be close in embedding space
+- SupCon loss with drug-pathway relationships from GDSC
+- Soft regularization (lambda=0.1) to balance with main IC50 prediction task
+
+Loss Function:
+```
+Loss = MSE(predicted_IC50, true_IC50) + lambda * SupCon_loss(drug_embeddings, pathway_labels)
+```
 
 ---
 
@@ -241,6 +246,11 @@ GS-ChemDRP/
 ├── prepare_gene_sets.py                   # Gene set preparation
 ├── create_drug_pathway_mapping.py         # Drug-pathway mapping
 │
+├── figures/                               # Figures for README
+│   ├── Figure 1.png                       # Model overview
+│   ├── Figure 2.png                       # Detailed architecture
+│   └── Figure 3.png                       # Contrastive learning framework
+│
 ├── data/
 │   ├── sample/                            # Sample data
 │   │   ├── sample_train.csv
@@ -266,11 +276,13 @@ GS-ChemDRP/
 
 ## Paper Information
 
-Title: Anticancer Drug Sensitivity Prediction Using Drug Target Pathway-Guided Contrastive Learning and Cross-Attention
+Title: Anti-Cancer Drug Response Prediction via Functional Gene Set Cross-Attention and Supervised Contrastive Learning
 
-Authors: Jongwoong Song (Seoul National University)
+Authors: Jongung Song (Chonnam National University)
 
-Journal: KCI (Korean Citation Index)
+Journal: Journal of Digital Contents Society
+
+Status: Under Review
 
 ---
 
