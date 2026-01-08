@@ -247,9 +247,9 @@ GS-ChemDRP/
 ├── create_drug_pathway_mapping.py         # Drug-pathway mapping
 │
 ├── figures/                               # Figures for README
-│   ├── Figure 1.png                       # Model overview
-│   ├── Figure 2.png                       # Detailed architecture
-│   └── Figure 3.png                       # Contrastive learning framework
+│   ├── figure1.png                        # Model overview
+│   ├── figure2.png                        # Detailed architecture
+│   └── figure3.png                        # Contrastive learning framework
 │
 ├── data/
 │   ├── sample/                            # Sample data
