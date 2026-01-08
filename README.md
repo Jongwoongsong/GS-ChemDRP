@@ -41,7 +41,7 @@ Ablation Study:
 
 ### Overall Model Structure
 
-![Model Overview](figures/Figure 1.png)
+![Model Overview](figures/figure1.png)
 
 The model consists of two main branches:
 - **Drug Encoder**: ChemBERTa-based encoder for drug representation
@@ -51,7 +51,7 @@ The model consists of two main branches:
 
 ### Detailed Architecture
 
-![Detailed Architecture](figures/Figure 2.png)
+![Detailed Architecture](figures/figure2.png)
 
 **Drug Branch:**
 - Input: SMILES strings
@@ -67,7 +67,7 @@ The model consists of two main branches:
 
 ### Contrastive Learning Framework
 
-![Contrastive Learning](figures/Figure 3.png)
+![Contrastive Learning](figures/figure3.png)
 
 Supervised contrastive learning encourages drugs targeting the same pathways to have similar embeddings:
 - Drug tokens from same target pathway should be close in embedding space
@@ -280,6 +280,8 @@ Title: Anti-Cancer Drug Response Prediction via Functional Gene Set Cross-Attent
 
 Authors: Jongung Song (Chonnam National University)
 
+Corresponding Author: Sunyong Yoo (syyoo@jnu.ac.kr)
+
 Journal: Journal of Digital Contents Society
 
 Status: Under Review
@@ -313,11 +315,14 @@ A: Yes! CCLE, GDSC_v2 and similar drug response datasets are supported.
 
 ---
 
-## Contact and Contribution
+## Contributing and Contact
 
-- Issues: GitHub Issues
+- Bug Report: GitHub Issues
+- Feature Request: GitHub Issues
 - Pull Requests: Welcome!
-- Questions: Discussions tab
+- Questions: Discussions or Email
+
+For more information, please contact the author via GitHub Issues.
 
 ---
 
